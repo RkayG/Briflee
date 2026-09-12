@@ -1,22 +1,22 @@
-# Briflee
+# Briflee (Client Portal SaaS)
 
-**The private workspace you give a client when they hire you.**
+This is the monorepo for Briflee, a client-facing workspace application for service providers. 
 
-Briflee is a B2B SaaS application that gives service providers (freelancers, agencies, developers) a polished, professional client-facing portal to manage ongoing work. It eliminates the need for scattered communication across WhatsApp, Google Drive, and email by providing a single place to see what's happening, review work, give feedback, and approve deliverables.
+For product requirements, business logic, and product positioning, please refer to the [Product Requirements Document (PRD)](./prd.md).
 
-## 📖 Project Documentation
-- **[Product Requirements Document (PRD)](./prd.md)**: Contains the full MVP scope, core features, database schema, and product principles.
+## 🏗️ Architecture
 
-## 🏗️ Workspace Structure
+This repository uses a monorepo structure.
 
-This project is set up as a monorepo containing the following packages:
+### `packages/frontend`
+The web client application.
+*   **Framework:** React 19
+*   **Build Tool:** Vite
+*   **Styling & UI:** Tailwind CSS, Untitled UI
+*   **Language:** TypeScript
+*   **Package Manager:** `pnpm`
 
-- `packages/frontend`: The React + Vite client-facing web application.
-  - **UI Framework:** [Untitled UI](https://www.untitledui.com/) (Tailwind CSS based)
-  - **Tooling:** Vite, React, TypeScript
-  - **Package Manager:** `pnpm`
-
-*(Additional packages like the backend API will be added here as the project grows.)*
+*(Backend services and shared packages will be added to the `packages/` directory as the architecture evolves).*
 
 ## 🚀 Getting Started
 
@@ -24,36 +24,29 @@ This project is set up as a monorepo containing the following packages:
 - Node.js (v18+)
 - `pnpm` (v9+)
 
-### Frontend Setup
+### Installation
 
-To run the frontend locally:
+1. Clone the repository and navigate to the root directory.
+2. Install dependencies for the frontend workspace:
 
 ```bash
-# Navigate to the frontend package
 cd packages/frontend
-
-# Install dependencies
 pnpm install
+```
 
-# Start the development server
+### Development
+
+To start the local development server for the frontend:
+
+```bash
+cd packages/frontend
 pnpm dev
 ```
+The application will be available at `http://localhost:5173` (or the port specified in your terminal).
 
-## 🧠 Philosophy
-The product does not try to replace a professional's internal toolstack (GitHub, Linear, Figma, Slack). Instead, it acts as the presentation layer:
+## 🛠️ Scripts
 
-```text
-                 YOUR WORK
-                     │
-        ┌────────────┼────────────┐
-        ↓            ↓            ↓
-     GitHub        Figma       Linear
-        │            │            │
-        └────────────┼────────────┘
-                     ↓
-                  BRIFLEE
-                     ↓
-                  CLIENT
-```
-
-*The workspace your clients actually want to use.*
+Available scripts in `packages/frontend/package.json`:
+- `pnpm dev`: Starts the Vite development server.
+- `pnpm build`: Compiles TypeScript and builds the app for production.
+- `pnpm preview`: Previews the production build locally.
