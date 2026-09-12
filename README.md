@@ -1,22 +1,9 @@
-# Briflee (Client Portal SaaS)
+# Briflee
 
-This is the monorepo for Briflee, a client-facing workspace application for service providers. 
+**The private workspace you give a client when they hire you.**
 
-For product requirements, business logic, and product positioning, please refer to the [Product Requirements Document (PRD)](./prd.md).
+Briflee is a B2B SaaS built for service providers (freelancers, agencies, developers) a polished, professional client-facing portal to manage ongoing work. It eliminates the need for scattered communication across WhatsApp, Google Drive, and email by providing a single place to see what's happening, review work, give feedback, and approve deliverables.
 
-## 🏗️ Architecture
-
-This repository uses a monorepo structure.
-
-### `packages/frontend`
-The web client application.
-*   **Framework:** React 19
-*   **Build Tool:** Vite
-*   **Styling & UI:** Tailwind CSS, Untitled UI
-*   **Language:** TypeScript
-*   **Package Manager:** `pnpm`
-
-*(Backend services and shared packages will be added to the `packages/` directory as the architecture evolves).*
 
 ## 🚀 Getting Started
 
@@ -24,29 +11,36 @@ The web client application.
 - Node.js (v18+)
 - `pnpm` (v9+)
 
-### Installation
+### Frontend Setup
 
-1. Clone the repository and navigate to the root directory.
-2. Install dependencies for the frontend workspace:
+To run the frontend locally:
 
 ```bash
+# Navigate to the frontend package
 cd packages/frontend
+
+# Install dependencies
 pnpm install
-```
 
-### Development
-
-To start the local development server for the frontend:
-
-```bash
-cd packages/frontend
+# Start the development server
 pnpm dev
 ```
-The application will be available at `http://localhost:5173` (or the port specified in your terminal).
 
-## 🛠️ Scripts
+## 🧠 Philosophy
+The product does not try to replace a professional's internal toolstack (GitHub, Linear, Figma, Slack). Instead, it acts as the presentation layer:
 
-Available scripts in `packages/frontend/package.json`:
-- `pnpm dev`: Starts the Vite development server.
-- `pnpm build`: Compiles TypeScript and builds the app for production.
-- `pnpm preview`: Previews the production build locally.
+```text
+                 YOUR WORK
+                     │
+        ┌────────────┼────────────┐
+        ↓            ↓            ↓
+     GitHub        Figma       Linear
+        │            │            │
+        └────────────┼────────────┘
+                     ↓
+                  BRIFLEE
+                     ↓
+                  CLIENT
+```
+
+*The workspace your clients actually want to use.*
