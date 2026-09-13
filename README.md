@@ -27,7 +27,7 @@ pnpm dev
 ```
 
 ## 🧠 Philosophy
-The product does not try to replace a professional's internal toolstack (GitHub, Linear, Figma, Slack). Instead, it acts as the presentation layer:
+Not built to replace a professional's internal toolstack (GitHub, Linear, Figma, Slack). Instead, it acts as the presentation layer:
 
 ```text
                  YOUR WORK
