@@ -67,3 +67,14 @@ input[type="search"]::-webkit-search-cancel-button {
 .recharts-surface path {
     outline: none;
 }
+
+/* BRAND GRADIENTS */
+@utility bg-brand-gradient-top { background-image: linear-gradient(0deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-right { background-image: linear-gradient(90deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-bottom { background-image: linear-gradient(180deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-left { background-image: linear-gradient(270deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-top-right { background-image: linear-gradient(45deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-bottom-right { background-image: linear-gradient(135deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-top-left { background-image: linear-gradient(225deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-bottom-left { background-image: linear-gradient(315deg, var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }
+@utility bg-brand-gradient-radial { background-image: radial-gradient(var(--color-brand-ink-black), var(--color-brand-alice-blue), var(--color-brand-laser-blue), var(--color-brand-cool-horizon), var(--color-brand-blush-pop)); }

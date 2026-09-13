@@ -1,4 +1,11 @@
 @theme {
+    /* BRAND COLORS */
+    --color-brand-ink-black: #10101aff;
+    --color-brand-alice-blue: #e1effaff;
+    --color-brand-laser-blue: #165ad7ff;
+    --color-brand-cool-horizon: #55a2f2ff;
+    --color-brand-blush-pop: #f5abceff;
+
     /* FONT FAMILY */
     --font-body: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     --font-display: var(--font-inter, "Inter"), -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
