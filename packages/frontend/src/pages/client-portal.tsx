@@ -9,6 +9,7 @@ import { Button } from "@/components/base/buttons/button";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { Badge } from "@/components/base/badges/badges";
 import { UntitledLogoMinimal } from "@/components/foundations/logo/untitledui-logo-minimal";
+import { useNavigate } from "react-router";
 
 const DUMMY_CLIENT_PROJECTS = [
     {
@@ -23,6 +24,8 @@ const DUMMY_CLIENT_PROJECTS = [
 ];
 
 export const ClientPortal = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="min-h-screen bg-secondary font-body flex flex-col">
             {/* Top Navigation */}
@@ -72,7 +75,11 @@ export const ClientPortal = () => {
                 {/* Projects List */}
                 <div className="grid gap-4">
                     {DUMMY_CLIENT_PROJECTS.map((project) => (
-                        <div key={project.id} className="group bg-primary border border-secondary rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col sm:flex-row sm:items-center gap-6">
+                        <div 
+                            key={project.id} 
+                            onClick={() => navigate('/client-portal/project')}
+                            className="group bg-primary border border-secondary rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex flex-col sm:flex-row sm:items-center gap-6"
+                        >
                             
                             {/* Project Info */}
                             <div className="flex-1">
