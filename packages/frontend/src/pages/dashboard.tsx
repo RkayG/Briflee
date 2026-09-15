@@ -29,7 +29,7 @@ export const Dashboard = () => {
                 </div>
 
                 {/* Hero / Needs Attention Card */}
-                <div className="bg-[#F5ABCE]/60 border border-[#F5ABCE] rounded-xl p-6 mb-8  flex flex-col md:flex-row items-center gap-6 shadow-sm">
+                <div className="bg-[#F5ABCE]/40 border border-[#F5ABCE] rounded-xl p-6 mb-8  flex flex-col md:flex-row items-center gap-6 shadow-sm">
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-4">
                             <FeaturedIcon icon={CheckCircle} color="brand" theme="light" size="sm" />
