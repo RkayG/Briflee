@@ -1,10 +1,10 @@
 generator client {
   provider = "prisma-client-js"
+  output   = "../../shared/src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
 }
 
 // ============================================================
@@ -169,121 +169,102 @@ enum ActivityEntityType {
   INVOICE
 }
 
-
 // ============================================================
 // USER / IDENTITY
 // ============================================================
 
 model User {
-  id                  String   @id @default(uuid()) @db.Uuid
-  email               String   @unique @db.VarChar(320)
-  passwordHash        String?  @map("password_hash")
-  firstName           String   @map("first_name") @db.VarChar(100)
-  lastName            String   @map("last_name") @db.VarChar(100)
-  avatarUrl           String?  @map("avatar_url") @db.Text
-  timezone            String   @default("UTC") @db.VarChar(64)
+  id           String  @id @default(uuid()) @db.Uuid
+  email        String  @unique @db.VarChar(320)
+  passwordHash String? @map("password_hash")
+  firstName    String  @map("first_name") @db.VarChar(100)
+  lastName     String  @map("last_name") @db.VarChar(100)
+  avatarUrl    String? @map("avatar_url") @db.Text
+  timezone     String  @default("UTC") @db.VarChar(64)
 
-  emailVerifiedAt     DateTime? @map("email_verified_at")
-  lastLoginAt         DateTime? @map("last_login_at")
+  emailVerifiedAt DateTime? @map("email_verified_at")
+  lastLoginAt     DateTime? @map("last_login_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  memberships         WorkspaceMember[]
-  ownedWorkspaces     Workspace[] @relation("WorkspaceOwner")
-  invitationsSent     Invitation[] @relation("InvitationInviter")
+  memberships     WorkspaceMember[]
+  ownedWorkspaces Workspace[]       @relation("WorkspaceOwner")
+  invitationsSent Invitation[]      @relation("InvitationInviter")
 
-  projectMemberships  ProjectMember[]
+  projectMemberships ProjectMember[]
 
-  assignedTasks       Task[] @relation("TaskAssignee")
-  createdTasks        Task[] @relation("TaskCreator")
+  assignedTasks Task[] @relation("TaskAssignee")
+  createdTasks  Task[] @relation("TaskCreator")
 
-  comments            DeliverableComment[]
-  approvals           Approval[]
-  messages            Message[]
-  notifications       Notification[]
+  comments      DeliverableComment[]
+  approvals     Approval[]
+  messages      Message[]
+  notifications Notification[]
 
-  activities          Activity[] @relation("ActivityActor")
+  activities Activity[] @relation("ActivityActor")
 
-  uploadedFiles       File[] @relation("FileUploader")
+  uploadedFiles File[] @relation("FileUploader")
 
-  clientContact       ClientContact?
+  clientContact ClientContact?
 
   @@index([deletedAt])
   @@index([emailVerifiedAt])
   @@map("users")
 }
 
-
 // ============================================================
 // WORKSPACE / TENANCY
 // ============================================================
 
 model Workspace {
-  id                  String   @id @default(uuid()) @db.Uuid
-  name                String   @db.VarChar(150)
-  slug                String   @unique @db.VarChar(100)
+  id   String @id @default(uuid()) @db.Uuid
+  name String @db.VarChar(150)
+  slug String @unique @db.VarChar(100)
 
-  ownerId             String   @map("owner_id") @db.Uuid
+  ownerId String @map("owner_id") @db.Uuid
 
-  logoUrl             String?  @map("logo_url") @db.Text
-  description         String?  @db.Text
+  logoUrl     String? @map("logo_url") @db.Text
+  description String? @db.Text
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  owner               User @relation(
-    "WorkspaceOwner",
-    fields: [ownerId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  owner User @relation("WorkspaceOwner", fields: [ownerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  members             WorkspaceMember[]
-  invitations         Invitation[]
-  clients             Client[]
-  projects            Project[]
-  files               File[]
-  invoices            Invoice[]
-  activities          Activity[]
+  members     WorkspaceMember[]
+  invitations Invitation[]
+  clients     Client[]
+  projects    Project[]
+  files       File[]
+  invoices    Invoice[]
+  activities  Activity[]
 
   @@index([ownerId])
   @@index([deletedAt])
   @@map("workspaces")
 }
 
-
 model WorkspaceMember {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  userId              String   @map("user_id") @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
+  userId      String @map("user_id") @db.Uuid
 
-  role                WorkspaceMemberRole @default(MEMBER)
-  status              WorkspaceMemberStatus @default(ACTIVE)
+  role   WorkspaceMemberRole   @default(MEMBER)
+  status WorkspaceMemberStatus @default(ACTIVE)
 
-  joinedAt            DateTime? @map("joined_at")
+  joinedAt DateTime? @map("joined_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  user                User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([workspaceId, userId])
   @@index([userId])
@@ -292,44 +273,32 @@ model WorkspaceMember {
   @@map("workspace_members")
 }
 
-
 // ============================================================
 // INVITATIONS
 // ============================================================
 
 model Invitation {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  inviterId           String   @map("inviter_id") @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
+  inviterId   String @map("inviter_id") @db.Uuid
 
-  email               String   @db.VarChar(320)
-  role                WorkspaceMemberRole @default(MEMBER)
+  email String              @db.VarChar(320)
+  role  WorkspaceMemberRole @default(MEMBER)
 
-  tokenHash           String   @unique @map("token_hash") @db.VarChar(255)
+  tokenHash String @unique @map("token_hash") @db.VarChar(255)
 
-  status              InvitationStatus @default(PENDING)
+  status InvitationStatus @default(PENDING)
 
-  expiresAt           DateTime @map("expires_at")
-  acceptedAt          DateTime? @map("accepted_at")
+  expiresAt  DateTime  @map("expires_at")
+  acceptedAt DateTime? @map("accepted_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  inviter             User @relation(
-    "InvitationInviter",
-    fields: [inviterId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  inviter User @relation("InvitationInviter", fields: [inviterId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([workspaceId, status])
   @@index([email])
@@ -337,39 +306,33 @@ model Invitation {
   @@map("invitations")
 }
 
-
 // ============================================================
 // CLIENTS
 // ============================================================
 
 model Client {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
 
-  name                String   @db.VarChar(150)
-  email               String?  @db.VarChar(320)
-  company             String?  @db.VarChar(150)
-  phone               String?  @db.VarChar(50)
+  name    String  @db.VarChar(150)
+  email   String? @db.VarChar(320)
+  company String? @db.VarChar(150)
+  phone   String? @db.VarChar(50)
 
-  status              ClientStatus @default(ACTIVE)
+  status ClientStatus @default(ACTIVE)
 
-  notes               String?  @db.Text
+  notes String? @db.Text
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  projects            Project[]
-  invoices            Invoice[]
-  contacts            ClientContact[]
+  projects Project[]
+  invoices Invoice[]
+  contacts ClientContact[]
 
   @@index([workspaceId])
   @@index([workspaceId, status])
@@ -379,79 +342,60 @@ model Client {
 }
 
 model ClientContact {
-  id          String   @id @default(uuid()) @db.Uuid
-  clientId    String   @map("client_id") @db.Uuid
-  userId      String   @unique @map("user_id") @db.Uuid
+  id       String @id @default(uuid()) @db.Uuid
+  clientId String @map("client_id") @db.Uuid
+  userId   String @unique @map("user_id") @db.Uuid
 
-  isPrimary   Boolean  @default(false)
+  isPrimary Boolean @default(false)
 
-  createdAt   DateTime @default(now()) @map("created_at")
-  updatedAt   DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  client      Client @relation(
-    fields: [clientId],
-    references: [id],
-    onDelete: Cascade
-  )
+  client Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
 
-  user        User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade
-  )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([clientId])
   @@map("client_contacts")
-} 
-
+}
 
 // ============================================================
 // PROJECTS
 // ============================================================
 
 model Project {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  clientId            String   @map("client_id") @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
+  clientId    String @map("client_id") @db.Uuid
 
-  name                String   @db.VarChar(200)
-  slug                String   @db.VarChar(120)
+  name String @db.VarChar(200)
+  slug String @db.VarChar(120)
 
-  description         String?  @db.Text
+  description String? @db.Text
 
-  status              ProjectStatus @default(PLANNING)
+  status ProjectStatus @default(PLANNING)
 
-  startDate           DateTime? @map("start_date")
-  dueDate             DateTime? @map("due_date")
-  completedAt         DateTime? @map("completed_at")
+  startDate   DateTime? @map("start_date")
+  dueDate     DateTime? @map("due_date")
+  completedAt DateTime? @map("completed_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  client              Client @relation(
-    fields: [clientId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  client Client @relation(fields: [clientId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  members             ProjectMember[]
-  milestones          Milestone[]
-  tasks               Task[]
-  deliverables        Deliverable[]
-  messages            Message[]
-  invoices            Invoice[]
-  files               File[]
-  activities          Activity[]
+  members      ProjectMember[]
+  milestones   Milestone[]
+  tasks        Task[]
+  deliverables Deliverable[]
+  messages     Message[]
+  invoices     Invoice[]
+  files        File[]
+  activities   Activity[]
 
   @@unique([workspaceId, slug])
   @@index([workspaceId, status])
@@ -462,70 +406,53 @@ model Project {
   @@map("projects")
 }
 
-
 model ProjectMember {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  projectId           String   @map("project_id") @db.Uuid
-  userId              String   @map("user_id") @db.Uuid
+  projectId String @map("project_id") @db.Uuid
+  userId    String @map("user_id") @db.Uuid
 
-  role                ProjectMemberRole @default(MEMBER)
+  role ProjectMemberRole @default(MEMBER)
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  project             Project @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  user                User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@unique([projectId, userId])
   @@index([userId])
   @@map("project_members")
 }
 
-
 // ============================================================
 // MILESTONES
 // ============================================================
 
 model Milestone {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  projectId           String   @map("project_id") @db.Uuid
+  projectId String @map("project_id") @db.Uuid
 
-  name                String   @db.VarChar(200)
-  description         String?  @db.Text
+  name        String  @db.VarChar(200)
+  description String? @db.Text
 
-  position            Int      @default(0)
+  position Int @default(0)
 
-  status              MilestoneStatus @default(NOT_STARTED)
+  status MilestoneStatus @default(NOT_STARTED)
 
-  dueDate             DateTime? @map("due_date")
-  completedAt         DateTime? @map("completed_at")
+  dueDate     DateTime? @map("due_date")
+  completedAt DateTime? @map("completed_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  project             Project @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  tasks               Task[]
-  deliverables        Deliverable[]
+  tasks        Task[]
+  deliverables Deliverable[]
 
   @@index([projectId, position])
   @@index([projectId, status])
@@ -534,64 +461,41 @@ model Milestone {
   @@map("milestones")
 }
 
-
 // ============================================================
 // TASKS
 // ============================================================
 
 model Task {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  projectId           String   @map("project_id") @db.Uuid
-  milestoneId         String?  @map("milestone_id")
+  projectId   String  @map("project_id") @db.Uuid
+  milestoneId String? @map("milestone_id")
 
-  assigneeId          String?  @map("assignee_id") @db.Uuid
-  creatorId           String   @map("creator_id") @db.Uuid
+  assigneeId String? @map("assignee_id") @db.Uuid
+  creatorId  String  @map("creator_id") @db.Uuid
 
-  title               String   @db.VarChar(200)
-  description         String?  @db.Text
+  title       String  @db.VarChar(200)
+  description String? @db.Text
 
-  status              TaskStatus @default(TODO)
-  priority            TaskPriority @default(MEDIUM)
+  status   TaskStatus   @default(TODO)
+  priority TaskPriority @default(MEDIUM)
 
-  position            Int      @default(0)
+  position Int @default(0)
 
-  dueDate             DateTime? @map("due_date")
-  completedAt         DateTime? @map("completed_at")
+  dueDate     DateTime? @map("due_date")
+  completedAt DateTime? @map("completed_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  project             Project @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  milestone           Milestone? @relation(
-    fields: [milestoneId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  assignee            User? @relation(
-    "TaskAssignee",
-    fields: [assigneeId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  assignee User? @relation("TaskAssignee", fields: [assigneeId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  creator             User @relation(
-    "TaskCreator",
-    fields: [creatorId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  creator User @relation("TaskCreator", fields: [creatorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([projectId, status])
   @@index([projectId, milestoneId])
@@ -601,51 +505,34 @@ model Task {
   @@map("tasks")
 }
 
-
 // ============================================================
 // DELIVERABLES
 // ============================================================
 
 model Deliverable {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  projectId           String   @map("project_id") @db.Uuid
-  milestoneId         String?  @map("milestone_id")
+  projectId   String  @map("project_id") @db.Uuid
+  milestoneId String? @map("milestone_id")
 
-  name                String   @db.VarChar(200)
-  description         String?  @db.Text
+  name        String  @db.VarChar(200)
+  description String? @db.Text
 
-  status              DeliverableStatus @default(DRAFT)
+  status DeliverableStatus @default(DRAFT)
 
-  currentVersionId    String?  @unique @map("current_version_id") @db.Uuid
+  currentVersionId String? @unique @map("current_version_id") @db.Uuid
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  project             Project @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  milestone           Milestone? @relation(
-    fields: [milestoneId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  milestone Milestone? @relation(fields: [milestoneId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  versions            DeliverableVersion[]
+  versions DeliverableVersion[]
 
-  currentVersion      DeliverableVersion? @relation(
-    "CurrentDeliverableVersion",
-    fields: [currentVersionId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  currentVersion DeliverableVersion? @relation("CurrentDeliverableVersion", fields: [currentVersionId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
   @@index([projectId, status])
   @@index([projectId, milestoneId])
@@ -653,40 +540,32 @@ model Deliverable {
   @@map("deliverables")
 }
 
-
 model DeliverableVersion {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  deliverableId       String   @map("deliverable_id") @db.Uuid
+  deliverableId String @map("deliverable_id") @db.Uuid
 
-  versionNumber       Int      @map("version_number")
-  title               String?  @db.VarChar(200)
-  description         String?  @db.Text
+  versionNumber Int     @map("version_number")
+  title         String? @db.VarChar(200)
+  description   String? @db.Text
 
-  status              DeliverableVersionStatus @default(DRAFT)
+  status DeliverableVersionStatus @default(DRAFT)
 
-  submittedAt         DateTime? @map("submitted_at")
-  approvedAt          DateTime? @map("approved_at")
-  changesRequestedAt  DateTime? @map("changes_requested_at")
+  submittedAt        DateTime? @map("submitted_at")
+  approvedAt         DateTime? @map("approved_at")
+  changesRequestedAt DateTime? @map("changes_requested_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  deliverable         Deliverable @relation(
-    fields: [deliverableId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  deliverable Deliverable @relation(fields: [deliverableId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  currentFor          Deliverable? @relation(
-    "CurrentDeliverableVersion"
-  )
+  currentFor Deliverable? @relation("CurrentDeliverableVersion")
 
-  comments            DeliverableComment[]
-  approvals           Approval[]
-  files               File[]
+  comments  DeliverableComment[]
+  approvals Approval[]
+  files     File[]
 
   @@unique([deliverableId, versionNumber])
   @@index([deliverableId, status])
@@ -695,53 +574,36 @@ model DeliverableVersion {
   @@map("deliverable_versions")
 }
 
-
 // ============================================================
 // DELIVERABLE COMMENTS / FEEDBACK
 // ============================================================
 
 model DeliverableComment {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  deliverableVersionId String  @map("deliverable_version_id") @db.Uuid
-  authorId             String  @map("author_id") @db.Uuid
+  deliverableVersionId String @map("deliverable_version_id") @db.Uuid
+  authorId             String @map("author_id") @db.Uuid
 
-  body                String   @db.Text
+  body String @db.Text
 
-  status              CommentStatus @default(OPEN)
+  status CommentStatus @default(OPEN)
 
-  parentCommentId     String?  @map("parent_comment_id") @db.Uuid
+  parentCommentId String? @map("parent_comment_id") @db.Uuid
 
-  resolvedAt          DateTime? @map("resolved_at")
-  resolvedById        String?  @map("resolved_by_id") @db.Uuid
+  resolvedAt   DateTime? @map("resolved_at")
+  resolvedById String?   @map("resolved_by_id") @db.Uuid
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  deliverableVersion  DeliverableVersion @relation(
-    fields: [deliverableVersionId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  deliverableVersion DeliverableVersion @relation(fields: [deliverableVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  author              User @relation(
-    fields: [authorId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  author User @relation(fields: [authorId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  parentComment       DeliverableComment? @relation(
-    "CommentReplies",
-    fields: [parentCommentId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  parentComment DeliverableComment? @relation("CommentReplies", fields: [parentCommentId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  replies             DeliverableComment[] @relation("CommentReplies")
+  replies DeliverableComment[] @relation("CommentReplies")
 
   @@index([deliverableVersionId, createdAt])
   @@index([authorId])
@@ -750,76 +612,54 @@ model DeliverableComment {
   @@map("deliverable_comments")
 }
 
-
 // ============================================================
 // APPROVALS
 // ============================================================
 
 model Approval {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  deliverableVersionId String  @map("deliverable_version_id") @db.Uuid
-  reviewerId          String   @map("reviewer_id") @db.Uuid
+  deliverableVersionId String @map("deliverable_version_id") @db.Uuid
+  reviewerId           String @map("reviewer_id") @db.Uuid
 
-  decision            ApprovalDecision
+  decision ApprovalDecision
 
-  note                String?  @db.Text
+  note String? @db.Text
 
-  createdAt           DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  deliverableVersion  DeliverableVersion @relation(
-    fields: [deliverableVersionId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  deliverableVersion DeliverableVersion @relation(fields: [deliverableVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  reviewer            User @relation(
-    fields: [reviewerId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  reviewer User @relation(fields: [reviewerId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
   @@index([deliverableVersionId, createdAt])
   @@index([reviewerId])
   @@map("approvals")
 }
 
-
 // ============================================================
 // PROJECT MESSAGES
 // ============================================================
 
 model Message {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  projectId           String   @map("project_id") @db.Uuid
-  senderId            String   @map("sender_id") @db.Uuid
+  projectId String @map("project_id") @db.Uuid
+  senderId  String @map("sender_id") @db.Uuid
 
-  type                MessageType @default(TEXT)
+  type MessageType @default(TEXT)
 
-  body                String   @db.Text
+  body String @db.Text
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  project             Project @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  sender              User @relation(
-    fields: [senderId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  sender User @relation(fields: [senderId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  attachments         File[]
+  attachments File[]
 
   @@index([projectId, createdAt])
   @@index([senderId])
@@ -827,78 +667,46 @@ model Message {
   @@map("messages")
 }
 
-
 // ============================================================
 // FILES
 // ============================================================
 
 model File {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  uploaderId          String   @map("uploader_id") @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
+  uploaderId  String @map("uploader_id") @db.Uuid
 
-  projectId           String?  @map("project_id") @db.Uuid
-  messageId           String?  @map("message_id") @db.Uuid
+  projectId            String? @map("project_id") @db.Uuid
+  messageId            String? @map("message_id") @db.Uuid
   deliverableVersionId String? @map("deliverable_version_id") @db.Uuid
-  invoiceId           String?  @map("invoice_id") @db.Uuid
+  invoiceId            String? @map("invoice_id") @db.Uuid
 
-  ownerType           FileOwnerType @map("owner_type")
+  ownerType FileOwnerType @map("owner_type")
 
-  originalName        String   @map("original_name") @db.VarChar(255)
-  storageKey          String   @unique @map("storage_key") @db.VarChar(500)
+  originalName String @map("original_name") @db.VarChar(255)
+  storageKey   String @unique @map("storage_key") @db.VarChar(500)
 
-  mimeType            String   @map("mime_type") @db.VarChar(150)
-  sizeBytes           BigInt   @map("size_bytes")
+  mimeType  String @map("mime_type") @db.VarChar(150)
+  sizeBytes BigInt @map("size_bytes")
 
-  checksum            String?  @db.VarChar(128)
+  checksum String? @db.VarChar(128)
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
-  deletedAt           DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  uploader            User @relation(
-    "FileUploader",
-    fields: [uploaderId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  uploader User @relation("FileUploader", fields: [uploaderId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  project             Project? @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  message             Message? @relation(
-    fields: [messageId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  message Message? @relation(fields: [messageId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  deliverableVersion  DeliverableVersion? @relation(
-    fields: [deliverableVersionId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  deliverableVersion DeliverableVersion? @relation(fields: [deliverableVersionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  invoice             Invoice? @relation(
-    fields: [invoiceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  invoice Invoice? @relation(fields: [invoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([workspaceId])
   @@index([workspaceId, projectId])
@@ -910,37 +718,31 @@ model File {
   @@map("files")
 }
 
-
 // ============================================================
 // NOTIFICATIONS
 // ============================================================
 
 model Notification {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  userId              String   @map("user_id") @db.Uuid
+  userId String @map("user_id") @db.Uuid
 
-  type                NotificationType
+  type NotificationType
 
-  title               String   @db.VarChar(200)
-  body                String   @db.Text
+  title String @db.VarChar(200)
+  body  String @db.Text
 
-  projectId           String?  @map("project_id") @db.Uuid
-  deliverableId       String?  @map("deliverable_id") @db.Uuid
-  messageId           String?  @map("message_id") @db.Uuid
+  projectId     String? @map("project_id") @db.Uuid
+  deliverableId String? @map("deliverable_id") @db.Uuid
+  messageId     String? @map("message_id") @db.Uuid
 
-  metadata            Json?
+  metadata Json?
 
-  readAt              DateTime? @map("read_at")
+  readAt DateTime? @map("read_at")
 
-  createdAt           DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  user                User @relation(
-    fields: [userId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([userId, readAt])
   @@index([userId, createdAt])
@@ -948,63 +750,47 @@ model Notification {
   @@map("notifications")
 }
 
-
 // ============================================================
 // INVOICES
 // ============================================================
 
 model Invoice {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  projectId           String?  @map("project_id") @db.Uuid
-  clientId            String   @map("client_id") @db.Uuid
+  workspaceId String  @map("workspace_id") @db.Uuid
+  projectId   String? @map("project_id") @db.Uuid
+  clientId    String  @map("client_id") @db.Uuid
 
-  invoiceNumber       String   @map("invoice_number") @db.VarChar(50)
+  invoiceNumber String @map("invoice_number") @db.VarChar(50)
 
-  status              InvoiceStatus @default(DRAFT)
+  status InvoiceStatus @default(DRAFT)
 
-  issueDate            DateTime @map("issue_date")
-  dueDate              DateTime @map("due_date")
+  issueDate DateTime @map("issue_date")
+  dueDate   DateTime @map("due_date")
 
-  currency             String   @default("USD") @db.Char(3)
+  currency String @default("USD") @db.Char(3)
 
-  subtotal             Decimal  @db.Decimal(12, 2)
-  tax                  Decimal  @default(0) @db.Decimal(12, 2)
-  total                Decimal  @db.Decimal(12, 2)
+  subtotal Decimal @db.Decimal(12, 2)
+  tax      Decimal @default(0) @db.Decimal(12, 2)
+  total    Decimal @db.Decimal(12, 2)
 
-  notes                String?  @db.Text
+  notes String? @db.Text
 
-  sentAt               DateTime? @map("sent_at")
-  paidAt               DateTime? @map("paid_at")
+  sentAt DateTime? @map("sent_at")
+  paidAt DateTime? @map("paid_at")
 
-  createdAt            DateTime @default(now()) @map("created_at")
-  updatedAt            DateTime @updatedAt @map("updated_at")
-  deletedAt            DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
-  workspace            Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  project              Project? @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  project Project? @relation(fields: [projectId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  client               Client @relation(
-    fields: [clientId],
-    references: [id],
-    onDelete: Restrict,
-    onUpdate: Cascade
-  )
+  client Client @relation(fields: [clientId], references: [id], onDelete: Restrict, onUpdate: Cascade)
 
-  items                InvoiceItem[]
-  files                File[]
+  items InvoiceItem[]
+  files File[]
 
   @@unique([workspaceId, invoiceNumber])
   @@index([workspaceId, status])
@@ -1015,78 +801,55 @@ model Invoice {
   @@map("invoices")
 }
 
-
 model InvoiceItem {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  invoiceId           String   @map("invoice_id") @db.Uuid
+  invoiceId String @map("invoice_id") @db.Uuid
 
-  description         String   @db.VarChar(500)
+  description String @db.VarChar(500)
 
-  quantity             Decimal  @default(1) @db.Decimal(10, 2)
-  unitPrice            Decimal  @db.Decimal(12, 2)
-  amount               Decimal  @db.Decimal(12, 2)
+  quantity  Decimal @default(1) @db.Decimal(10, 2)
+  unitPrice Decimal @db.Decimal(12, 2)
+  amount    Decimal @db.Decimal(12, 2)
 
-  position            Int      @default(0)
+  position Int @default(0)
 
-  createdAt           DateTime @default(now()) @map("created_at")
-  updatedAt           DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
-  invoice             Invoice @relation(
-    fields: [invoiceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  invoice Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([invoiceId, position])
   @@map("invoice_items")
 }
-
 
 // ============================================================
 // ACTIVITY / AUDIT HISTORY
 // ============================================================
 
 model Activity {
-  id                  String   @id @default(uuid()) @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
-  workspaceId         String   @map("workspace_id") @db.Uuid
-  actorId             String?  @map("actor_id") @db.Uuid
+  workspaceId String  @map("workspace_id") @db.Uuid
+  actorId     String? @map("actor_id") @db.Uuid
 
-  action              ActivityAction
-  entityType          ActivityEntityType
-  entityId            String   @db.Uuid
+  action     ActivityAction
+  entityType ActivityEntityType
+  entityId   String             @db.Uuid
 
-  projectId           String?  @map("project_id") @db.Uuid
+  projectId String? @map("project_id") @db.Uuid
 
-  description         String   @db.Text
+  description String @db.Text
 
-  metadata            Json?
+  metadata Json?
 
-  createdAt           DateTime @default(now()) @map("created_at")
+  createdAt DateTime @default(now()) @map("created_at")
 
-  workspace           Workspace @relation(
-    fields: [workspaceId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  workspace Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
-  actor               User? @relation(
-    "ActivityActor",
-    fields: [actorId],
-    references: [id],
-    onDelete: SetNull,
-    onUpdate: Cascade
-  )
+  actor User? @relation("ActivityActor", fields: [actorId], references: [id], onDelete: SetNull, onUpdate: Cascade)
 
-  project             Project? @relation(
-    fields: [projectId],
-    references: [id],
-    onDelete: Cascade,
-    onUpdate: Cascade
-  )
+  project Project? @relation(fields: [projectId], references: [id], onDelete: Cascade, onUpdate: Cascade)
 
   @@index([workspaceId, createdAt])
   @@index([workspaceId, entityType, entityId])
