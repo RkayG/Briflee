@@ -104,9 +104,9 @@ export const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                         />
                     </div>
                     <div className="flex items-center gap-4 ml-auto">
-                        <button className="p-2 text-secondary hover:bg-secondary rounded-full">
+                        <Link to="/notifications" className="p-2 text-secondary hover:bg-secondary rounded-full">
                             <Bell01 className="size-5" />
-                        </button>
+                        </Link>
                     </div>
                 </header>
 
