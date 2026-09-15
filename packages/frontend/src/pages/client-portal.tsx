@@ -35,7 +35,7 @@ export const ClientPortal = () => {
                     <span className="font-semibold text-primary text-lg">Briflee</span>
                 </div>
                 <div className="flex items-center gap-4">
-                    <button className="p-2 text-secondary hover:bg-secondary rounded-full relative">
+                    <button onClick={() => navigate('/notifications')} className="p-2 text-secondary hover:bg-secondary rounded-full relative">
                         <Bell01 className="size-5" />
                         <span className="absolute top-1 right-1 size-2.5 bg-utility-brand-500 rounded-full border-2 border-primary"></span>
                     </button>
