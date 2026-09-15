@@ -12,6 +12,10 @@ import { ClientProjectDetail } from "@/pages/client-project-detail";
 import { DeliverableReview } from "@/pages/deliverable-review";
 import { Settings } from "@/pages/settings";
 import { Notifications } from "@/pages/notifications";
+import { Login } from "@/pages/login";
+import { Signup } from "@/pages/signup";
+import { ForgotPassword } from "@/pages/forgot-password";
+import { ClientInvitation } from "@/pages/client-invitation";
 import { NotFound } from "@/pages/not-found";
 import { RouteProvider } from "@/providers/router-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
@@ -23,6 +27,13 @@ createRoot(document.getElementById("root")!).render(
             <BrowserRouter>
                 <RouteProvider>
                     <Routes>
+                        {/* Auth Routes */}
+                        <Route path="/login" element={<Login />} />
+                        <Route path="/signup" element={<Signup />} />
+                        <Route path="/forgot-password" element={<ForgotPassword />} />
+                        <Route path="/invite/:id" element={<ClientInvitation />} />
+
+                        {/* App Routes */}
                         <Route path="/" element={<Dashboard />} />
                         <Route path="/projects" element={<Projects />} />
                         <Route path="/projects/new" element={<CreateProject />} />
