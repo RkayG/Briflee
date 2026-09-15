@@ -20,7 +20,7 @@ export const Dashboard = () => {
                 {/* Page Header */}
                 <div className="flex items-center justify-between mb-8">
                     <h1 className="text-display-xs font-semibold text-primary">Overview</h1>
-                    <Button variant="link" color="link-color" iconTrailing={LinkExternal01} className="font-medium">
+                    <Button color="link-color" iconTrailing={LinkExternal01} className="font-medium">
                         Preview client portal
                     </Button>
                 </div>
