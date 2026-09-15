@@ -4,3 +4,6 @@ node_modules
 # Prisma Generated Client
 packages/shared/src/generated
 packages/shared/dist
+
+backend-spec.md
+packages/backend/dist
