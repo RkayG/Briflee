@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { SearchSm, Plus, DotsVertical, Users01, Mail01 } from "@untitledui/icons";
 import { Button } from "@/components/base/buttons/button";
 import { Avatar } from "@/components/base/avatar/avatar";
@@ -34,6 +35,8 @@ const DUMMY_CLIENTS = [
 ];
 
 export const Clients = () => {
+    const navigate = useNavigate();
+
     return (
         <DashboardLayout>
             <div className="max-w-6xl mx-auto p-8">
@@ -75,7 +78,11 @@ export const Clients = () => {
                             </thead>
                             <tbody className="divide-y divide-secondary">
                                 {DUMMY_CLIENTS.map((client) => (
-                                    <tr key={client.id} className="hover:bg-secondary/50 transition-colors cursor-pointer group">
+                                    <tr 
+                                        key={client.id} 
+                                        onClick={() => navigate(`/clients/${client.id}`)}
+                                        className="hover:bg-secondary/50 transition-colors cursor-pointer group"
+                                    >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <Avatar src={client.avatar} alt={client.name} size="md" />
