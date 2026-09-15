@@ -99,7 +99,11 @@ export const Projects = () => {
                             </thead>
                             <tbody className="divide-y divide-secondary">
                                 {DUMMY_PROJECTS.map((project) => (
-                                    <tr key={project.id} className="hover:bg-secondary/50 transition-colors cursor-pointer group">
+                                    <tr 
+                                        key={project.id} 
+                                        onClick={() => navigate(`/projects/${project.id}`)}
+                                        className="hover:bg-secondary/50 transition-colors cursor-pointer group"
+                                    >
                                         <td className="px-6 py-4">
                                             <div className="flex items-center gap-3">
                                                 <div className="size-10 rounded-lg bg-secondary flex flex-shrink-0 items-center justify-center border border-secondary">
