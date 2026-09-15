@@ -1,0 +1,10 @@
+{
+  "name": "briflee-workspace",
+  "private": true,
+  "scripts": {
+    "dev:web": "pnpm --filter frontend dev",
+    "dev:backend": "pnpm --filter backend start:dev",
+    "dev:www": "pnpm --filter www dev",
+    "dev": "pnpm run dev:web & pnpm run dev:backend"
+  }
+}
