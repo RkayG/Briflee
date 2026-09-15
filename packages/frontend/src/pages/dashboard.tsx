@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import {
     Briefcase01,
     Users01,
@@ -14,6 +15,8 @@ import { FeaturedIcon } from "@/components/foundations/featured-icon/featured-ic
 import { DashboardLayout } from "@/components/application/layout/dashboard-layout";
 
 export const Dashboard = () => {
+    const navigate = useNavigate();
+
     return (
         <DashboardLayout>
             <div className="max-w-5xl mx-auto p-8">
@@ -26,7 +29,7 @@ export const Dashboard = () => {
                 </div>
 
                 {/* Hero / Needs Attention Card */}
-                <div className="bg-brand-secondary rounded-xl p-6 mb-8 border border-brand-secondary flex flex-col md:flex-row items-center gap-6 shadow-sm">
+                <div className="bg-[#F5ABCE]/60 border border-[#F5ABCE] rounded-xl p-6 mb-8  flex flex-col md:flex-row items-center gap-6 shadow-sm">
                     <div className="flex-1">
                         <div className="flex items-center gap-2 mb-4">
                             <FeaturedIcon icon={CheckCircle} color="brand" theme="light" size="sm" />
@@ -67,7 +70,12 @@ export const Dashboard = () => {
                             <p className="text-display-xs font-semibold text-primary">3 projects</p>
                         </div>
 
-                        <Button color="secondary" className="w-full mb-6 justify-start text-tertiary" iconLeading={Plus}>
+                        <Button 
+                            color="secondary" 
+                            className="w-full mb-6 justify-start text-tertiary" 
+                            iconLeading={Plus}
+                            onClick={() => navigate('/projects/new')}
+                        >
                             Create new project
                         </Button>
 

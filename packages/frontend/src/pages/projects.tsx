@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import { SearchSm, FilterLines, Plus, DotsVertical, Briefcase01 } from "@untitledui/icons";
 import { Button } from "@/components/base/buttons/button";
 import { Badge } from "@/components/base/badges/badges";
@@ -49,6 +50,8 @@ const getStatusBadgeColor = (status: string) => {
 };
 
 export const Projects = () => {
+    const navigate = useNavigate();
+
     return (
         <DashboardLayout>
             <div className="max-w-6xl mx-auto p-8">
@@ -58,7 +61,7 @@ export const Projects = () => {
                         <h1 className="text-display-sm font-semibold text-primary mb-1">Projects</h1>
                         <p className="text-tertiary">Manage your active work and client workspaces.</p>
                     </div>
-                    <Button color="primary" size="md" iconLeading={Plus}>
+                    <Button color="primary" size="md" iconLeading={Plus} onClick={() => navigate('/projects/new')}>
                         Create project
                     </Button>
                 </div>
