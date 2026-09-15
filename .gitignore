@@ -1,2 +1,6 @@
 prd.md
 design-spec.md
+node_modules
+# Prisma Generated Client
+packages/shared/src/generated
+packages/shared/dist
