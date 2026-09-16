@@ -1,9 +1,65 @@
+# ----------------------------------------------------------------------
+# Centralized Briflee Monorepo .gitignore
+# ----------------------------------------------------------------------
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Environment Variables
+.env
+.env.*
+.env.local
+*.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.pnpm-debug.log*
+lerna-debug.log*
+
+# Build Outputs
+dist/
+dist-ssr/
+build/
+out/
+.next/
+*.tsbuildinfo
+next-env.d.ts
+
+# Testing
+coverage/
+
+# Misc / OS / Editors
+.DS_Store
+*.pem
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Vercel
+.vercel/
+
+# Prisma Generated Client (Shared Package)
+packages/shared/src/generated/
+packages/shared/dist/
+
+# Project Specification Docs
 prd.md
 design-spec.md
-node_modules
-# Prisma Generated Client
-packages/shared/src/generated
-packages/shared/dist
-
 backend-spec.md
-packages/backend/dist
