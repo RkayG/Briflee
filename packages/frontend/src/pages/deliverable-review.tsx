@@ -31,7 +31,7 @@ export const DeliverableReview = () => {
                         <p className="text-xs text-tertiary">Acme Website Redesign</p>
                     </div>
                     {isApproved ? (
-                        <Badge color="success" size="sm" iconLeading={CheckCircle}>Approved</Badge>
+                        <Badge color="success" size="sm">Approved</Badge>
                     ) : (
                         <Badge color="warning" size="sm">Pending Review</Badge>
                     )}

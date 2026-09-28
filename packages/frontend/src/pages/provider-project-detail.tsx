@@ -80,7 +80,7 @@ export const ProviderProjectDetail = () => {
                             <section>
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-lg font-semibold text-primary">Active Deliverables</h2>
-                                    <Button variant="link" color="link-gray" size="sm">View all</Button>
+                                    <Button color="link-gray" size="sm">View all</Button>
                                 </div>
                                 <div className="grid gap-4">
                                     <div 
