@@ -290,43 +290,42 @@ export const ProviderProjectDetail = () => {
                 {/* Tab Content: Milestones */}
                 {activeTab === "Milestones" && (
                     <div className="space-y-4">
-                        <div className="bg-primary border border-secondary rounded-xl overflow-hidden">
-                            <table className="w-full text-left text-sm">
-                                <thead className="bg-secondary/30 border-b border-secondary text-tertiary">
-                                    <tr>
-                                        <th className="px-6 py-4 font-medium">Milestone Name</th>
-                                        <th className="px-6 py-4 font-medium">Status</th>
-                                        <th className="px-6 py-4 font-medium">Target Date</th>
-                                        <th className="px-6 py-4 font-medium text-right">Actions</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-secondary text-secondary">
-                                    <tr>
-                                        <td className="px-6 py-4 font-medium text-primary">Discovery</td>
-                                        <td className="px-6 py-4"><Badge color="success" size="sm">Done</Badge></td>
-                                        <td className="px-6 py-4">Sep 1, 2026</td>
-                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-6 py-4 font-medium text-primary">Design</td>
-                                        <td className="px-6 py-4"><Badge color="success" size="sm">Done</Badge></td>
-                                        <td className="px-6 py-4">Sep 15, 2026</td>
-                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
-                                    </tr>
-                                    <tr className="bg-brand-primary/5">
-                                        <td className="px-6 py-4 font-medium text-primary">Development</td>
-                                        <td className="px-6 py-4"><Badge color="brand" size="sm">Current</Badge></td>
-                                        <td className="px-6 py-4">Oct 15, 2026</td>
-                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
-                                    </tr>
-                                    <tr>
-                                        <td className="px-6 py-4 font-medium text-primary">Testing</td>
-                                        <td className="px-6 py-4"><Badge color="gray" size="sm">Pending</Badge></td>
-                                        <td className="px-6 py-4">Nov 1, 2026</td>
-                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div className="flex items-center justify-between mb-2">
+                            <h2 className="text-lg font-semibold text-primary">Journey Map</h2>
+                        </div>
+                        <div className="bg-primary border border-secondary rounded-xl p-8 shadow-sm overflow-x-auto">
+                            <div className="relative min-w-[800px] h-80 flex items-center justify-between px-16">
+                                {/* The Main Timeline Line */}
+                                <div className="absolute left-16 right-16 top-1/2 h-1 -translate-y-1/2 bg-secondary rounded-full"></div>
+                                
+                                {/* Progress Line overlay (assuming we are at step 3) */}
+                                <div className="absolute left-16 top-1/2 h-1 -translate-y-1/2 bg-brand-primary rounded-full w-1/2"></div>
+                                
+                                {[
+                                    { title: "Discovery", status: "Done", date: "Sep 1, 2026", color: "bg-brand-primary", text: "text-brand-primary", bg: "bg-utility-brand-50" },
+                                    { title: "Design", status: "Done", date: "Sep 15, 2026", color: "bg-brand-primary", text: "text-brand-primary", bg: "bg-utility-brand-50" },
+                                    { title: "Development", status: "Current", date: "Oct 15, 2026", color: "bg-brand-primary ring-4 ring-utility-brand-200", text: "text-brand-primary", bg: "bg-utility-brand-50" },
+                                    { title: "Testing", status: "Pending", date: "Nov 1, 2026", color: "bg-quaternary", text: "text-tertiary", bg: "bg-secondary" },
+                                    { title: "Launch", status: "Pending", date: "Nov 15, 2026", color: "bg-quaternary", text: "text-tertiary", bg: "bg-secondary" }
+                                ].map((m, i) => (
+                                    <div key={i} className="relative z-10 flex flex-col items-center">
+                                        {/* The Node */}
+                                        <div className={`size-4 rounded-full border-2 border-primary ${m.color}`}></div>
+                                        
+                                        {/* The Card */}
+                                        <div className={`absolute w-48 p-4 border border-secondary rounded-xl bg-primary shadow-md text-center transition-transform hover:-translate-y-1 cursor-pointer ${i % 2 === 0 ? 'bottom-10' : 'top-10'}`}>
+                                            <div className={`px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider mb-2 w-max mx-auto ${m.bg} ${m.text}`}>
+                                                {m.status}
+                                            </div>
+                                            <h3 className="font-semibold text-primary mb-1">{m.title}</h3>
+                                            <p className="text-xs text-tertiary">{m.date}</p>
+                                        </div>
+                                        
+                                        {/* The Connector Line */}
+                                        <div className={`absolute w-[2px] bg-secondary/50 h-6 ${i % 2 === 0 ? 'bottom-4' : 'top-4'}`}></div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 )}
