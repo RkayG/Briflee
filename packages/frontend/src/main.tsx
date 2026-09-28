@@ -12,6 +12,7 @@ import { ClientProjectDetail } from "@/pages/client-project-detail";
 import { DeliverableReview } from "@/pages/deliverable-review";
 import { Settings } from "@/pages/settings";
 import { Notifications } from "@/pages/notifications";
+import { Messages } from "@/pages/messages";
 import { Login } from "@/pages/login";
 import { Signup } from "@/pages/signup";
 import { ForgotPassword } from "@/pages/forgot-password";
@@ -44,6 +45,7 @@ createRoot(document.getElementById("root")!).render(
                         <Route path="/client-portal/project" element={<ClientProjectDetail />} />
                         <Route path="/deliverable/:id" element={<DeliverableReview />} />
                         <Route path="/settings" element={<Settings />} />
+                        <Route path="/messages" element={<Messages />} />
                         <Route path="/notifications" element={<Notifications />} />
                         <Route path="*" element={<NotFound />} />
                     </Routes>
