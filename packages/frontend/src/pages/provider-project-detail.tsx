@@ -7,15 +7,18 @@ import {
     File02,
     CheckCircle,
     MessageCircle01,
-    DotsVertical,
     Calendar,
-    Users01,
-    ArrowLeft
+    XClose,
+    Settings01,
+    Trash01
 } from "@untitledui/icons";
 import { Button } from "@/components/base/buttons/button";
 import { Badge } from "@/components/base/badges/badges";
 import { Avatar } from "@/components/base/avatar/avatar";
 import { DashboardLayout } from "@/components/application/layout/dashboard-layout";
+import { ModalOverlay, Modal, Dialog, DialogTrigger } from "@/components/application/modals/modal";
+import { Input } from "@/components/base/input/input";
+import { Label } from "@/components/base/input/label";
 
 const TABS = ["Overview", "Deliverables", "Milestones", "Files", "Settings"];
 
@@ -44,12 +47,82 @@ export const ProviderProjectDetail = () => {
                         </p>
                     </div>
                     <div className="flex items-center gap-3">
-                        <Button color="secondary" size="md" iconLeading={Plus}>
-                            Add milestone
-                        </Button>
-                        <Button color="primary" size="md" iconLeading={UploadCloud01}>
-                            Upload deliverable
-                        </Button>
+                        {/* Add Milestone Modal */}
+                        <DialogTrigger>
+                            <Button color="secondary" size="md" iconLeading={Plus}>
+                                Add milestone
+                            </Button>
+                            <ModalOverlay>
+                                <Modal className="flex justify-center items-center w-full">
+                                    <Dialog className="bg-primary border border-secondary rounded-xl p-6 shadow-xl w-[90vw] max-w-md outline-hidden">
+                                        {({ close }) => (
+                                            <div className="w-full flex flex-col">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h2 className="text-lg font-semibold text-primary">Add New Milestone</h2>
+                                                    <button onClick={close} className="text-tertiary hover:text-primary transition-colors"><XClose className="size-5" /></button>
+                                                </div>
+                                                <div className="space-y-4 mb-6">
+                                                    <div>
+                                                        <Label className="mb-1 block">Milestone Name</Label>
+                                                        <Input placeholder="e.g., Final Polish" />
+                                                    </div>
+                                                    <div>
+                                                        <Label className="mb-1 block">Target Date</Label>
+                                                        <Input type="date" />
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-end gap-3">
+                                                    <Button color="secondary" onClick={close}>Cancel</Button>
+                                                    <Button color="primary" onClick={close}>Add Milestone</Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Dialog>
+                                </Modal>
+                            </ModalOverlay>
+                        </DialogTrigger>
+
+                        {/* Upload Deliverable Modal */}
+                        <DialogTrigger>
+                            <Button color="primary" size="md" iconLeading={UploadCloud01}>
+                                Upload deliverable
+                            </Button>
+                            <ModalOverlay>
+                                <Modal className="flex justify-center items-center w-full">
+                                    <Dialog className="bg-primary border border-secondary rounded-xl p-6 shadow-xl w-[90vw] max-w-md outline-hidden">
+                                        {({ close }) => (
+                                            <div className="w-full flex flex-col">
+                                                <div className="flex items-center justify-between mb-4">
+                                                    <h2 className="text-lg font-semibold text-primary">Upload Deliverable</h2>
+                                                    <button onClick={close} className="text-tertiary hover:text-primary transition-colors"><XClose className="size-5" /></button>
+                                                </div>
+                                                <div className="space-y-4 mb-6">
+                                                    <div>
+                                                        <Label className="mb-1 block">Deliverable Name</Label>
+                                                        <Input placeholder="e.g., Homepage Design v4" />
+                                                    </div>
+                                                    <div>
+                                                        <Label className="mb-1 block">File Attachment</Label>
+                                                        <div className="border-2 border-dashed border-secondary rounded-lg p-8 text-center bg-secondary/20">
+                                                            <UploadCloud01 className="size-6 text-tertiary mx-auto mb-2" />
+                                                            <p className="text-sm text-secondary">Drag and drop or <span className="text-brand-primary font-medium cursor-pointer">browse</span></p>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <Label className="mb-1 block">Notes for Client (Optional)</Label>
+                                                        <textarea className="w-full bg-primary border border-secondary rounded-lg p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none" rows={3} placeholder="Add any context here..."></textarea>
+                                                    </div>
+                                                </div>
+                                                <div className="flex justify-end gap-3">
+                                                    <Button color="secondary" onClick={close}>Cancel</Button>
+                                                    <Button color="primary" onClick={close}>Upload & Submit</Button>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </Dialog>
+                                </Modal>
+                            </ModalOverlay>
+                        </DialogTrigger>
                     </div>
                 </div>
 
@@ -80,7 +153,7 @@ export const ProviderProjectDetail = () => {
                             <section>
                                 <div className="flex items-center justify-between mb-4">
                                     <h2 className="text-lg font-semibold text-primary">Active Deliverables</h2>
-                                    <Button color="link-gray" size="sm">View all</Button>
+                                    <Button color="link-gray" size="sm" onClick={() => setActiveTab("Deliverables")}>View all</Button>
                                 </div>
                                 <div className="grid gap-4">
                                     <div 
@@ -88,8 +161,8 @@ export const ProviderProjectDetail = () => {
                                         className="bg-primary border border-secondary rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer flex items-center justify-between group"
                                     >
                                         <div className="flex items-center gap-4">
-                                            <div className="size-12 rounded-lg bg-utility-brand-50 border border-utility-brand-100 flex items-center justify-center text-utility-brand-600">
-                                                <File02 className="size-6" />
+                                            <div className="flex items-center justify-center size-10 rounded-lg bg-utility-brand-50 text-utility-brand-600">
+                                                <File02 className="size-5" />
                                             </div>
                                             <div>
                                                 <h3 className="font-medium text-primary mb-1 group-hover:text-brand-primary transition-colors">Homepage Design v3</h3>
@@ -184,6 +257,119 @@ export const ProviderProjectDetail = () => {
                                 </div>
                             </section>
                         </div>
+                    </div>
+                )}
+
+                {/* Tab Content: Deliverables */}
+                {activeTab === "Deliverables" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between mb-6">
+                            <h2 className="text-lg font-semibold text-primary">All Deliverables</h2>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {[
+                                { title: "Homepage Design v3", status: "Pending Review", color: "warning" },
+                                { title: "Wireframes v2", status: "Approved", color: "success" },
+                                { title: "Design System v1", status: "Changes Requested", color: "error" },
+                            ].map((d, i) => (
+                                <div key={i} onClick={() => navigate('/deliverable/1')} className="bg-primary border border-secondary rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className="flex items-center justify-center size-10 rounded-lg bg-utility-brand-50 text-utility-brand-600">
+                                            <File02 className="size-5" />
+                                        </div>
+                                        <Badge color={d.color as any} size="sm">{d.status}</Badge>
+                                    </div>
+                                    <h3 className="font-medium text-primary mb-1">{d.title}</h3>
+                                    <p className="text-sm text-tertiary">Uploaded Sep {15 - i}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Tab Content: Milestones */}
+                {activeTab === "Milestones" && (
+                    <div className="space-y-4">
+                        <div className="bg-primary border border-secondary rounded-xl overflow-hidden">
+                            <table className="w-full text-left text-sm">
+                                <thead className="bg-secondary/30 border-b border-secondary text-tertiary">
+                                    <tr>
+                                        <th className="px-6 py-4 font-medium">Milestone Name</th>
+                                        <th className="px-6 py-4 font-medium">Status</th>
+                                        <th className="px-6 py-4 font-medium">Target Date</th>
+                                        <th className="px-6 py-4 font-medium text-right">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody className="divide-y divide-secondary text-secondary">
+                                    <tr>
+                                        <td className="px-6 py-4 font-medium text-primary">Discovery</td>
+                                        <td className="px-6 py-4"><Badge color="success" size="sm">Done</Badge></td>
+                                        <td className="px-6 py-4">Sep 1, 2026</td>
+                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-6 py-4 font-medium text-primary">Design</td>
+                                        <td className="px-6 py-4"><Badge color="success" size="sm">Done</Badge></td>
+                                        <td className="px-6 py-4">Sep 15, 2026</td>
+                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
+                                    </tr>
+                                    <tr className="bg-brand-primary/5">
+                                        <td className="px-6 py-4 font-medium text-primary">Development</td>
+                                        <td className="px-6 py-4"><Badge color="brand" size="sm">Current</Badge></td>
+                                        <td className="px-6 py-4">Oct 15, 2026</td>
+                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
+                                    </tr>
+                                    <tr>
+                                        <td className="px-6 py-4 font-medium text-primary">Testing</td>
+                                        <td className="px-6 py-4"><Badge color="gray" size="sm">Pending</Badge></td>
+                                        <td className="px-6 py-4">Nov 1, 2026</td>
+                                        <td className="px-6 py-4 text-right"><Button color="link-gray" size="sm">Edit</Button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                )}
+
+                {/* Tab Content: Files */}
+                {activeTab === "Files" && (
+                    <div className="space-y-4">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-lg font-semibold text-primary">Project Files</h2>
+                        </div>
+                        <div className="bg-primary border border-secondary rounded-xl p-8 text-center">
+                            <File02 className="size-12 text-quaternary mx-auto mb-4" />
+                            <h3 className="text-lg font-medium text-primary mb-2">No files uploaded yet</h3>
+                            <p className="text-tertiary mb-6">Deliverables and attachments will appear here.</p>
+                        </div>
+                    </div>
+                )}
+
+                {/* Tab Content: Settings */}
+                {activeTab === "Settings" && (
+                    <div className="max-w-3xl space-y-8">
+                        <section className="bg-primary border border-secondary rounded-xl p-6 shadow-sm">
+                            <h2 className="text-lg font-semibold text-primary mb-6 flex items-center gap-2"><Settings01 className="size-5"/> General Settings</h2>
+                            <div className="space-y-4">
+                                <div>
+                                    <Label className="mb-1 block">Project Name</Label>
+                                    <Input defaultValue="Acme Website Redesign" />
+                                </div>
+                                <div>
+                                    <Label className="mb-1 block">Project Description</Label>
+                                    <textarea className="w-full bg-primary border border-secondary rounded-lg p-3 text-sm text-primary focus:outline-hidden focus:ring-2 focus:ring-brand-primary/20 focus:border-brand-primary resize-none" rows={4} defaultValue="A full revamp of the Acme Corp corporate website."></textarea>
+                                </div>
+                                <div className="pt-2">
+                                    <Button color="primary">Save Changes</Button>
+                                </div>
+                            </div>
+                        </section>
+                        
+                        <section className="bg-primary border border-error rounded-xl p-6 shadow-sm">
+                            <h2 className="text-lg font-semibold text-error mb-2 flex items-center gap-2"><Trash01 className="size-5"/> Danger Zone</h2>
+                            <p className="text-sm text-tertiary mb-4">Archiving this project will hide it from active views, but keep its data intact.</p>
+                            <Button color="primary-destructive">Archive Project</Button>
+                        </section>
                     </div>
                 )}
             </div>
